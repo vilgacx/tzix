@@ -2,14 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.border-com {
+  @apply border-2 border-white;
+}
+
 .com {
-    @apply h-full bg-neutral-900 border-2 border-white rounded;
+  @apply h-full bg-neutral-900 border-com rounded;
 }
 
 .opt-div {
-    @apply h-12;
-}
-
-.opt-btn {
-  @apply py-2 text-center text-purple-500;
+  @apply flex w-full p-4 justify-between items-center text-sm text-white;
 }
