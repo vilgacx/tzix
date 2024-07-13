@@ -5,6 +5,7 @@ import Ball from "../Ball";
 import ToggleBtn from "./ToggleBtn";
 
 export default function Scene() {
+  const [BallInstance, SetBallInstance] = useState<Ball>();
   const [CTX, SetCTX] = useState<CanvasRenderingContext2D>();
   const [Msg, SetMsg] = useState("");
   const Canvas = useRef<HTMLCanvasElement>(null);
@@ -23,15 +24,32 @@ export default function Scene() {
       canvas.style.width = '100%';
       canvas.style.height = '100%';
       canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;          
+      canvas.height = canvas.offsetHeight; 
     }
+
   }, []);
 
+  useEffect(() => {
+    if (CTX && Canvas) { 
+      const { left, top, width, height } =  Canvas.current?.getBoundingClientRect()!;
+      const ball_instance = new Ball(width, height, CTX!);
+      
+      SetBallInstance(ball_instance);
+
+      Canvas.current!.onmousemove = (event) => {
+        if (ball_instance) {
+            ball_instance.mx = event.clientX - left;
+            ball_instance.my = event.clientY - top;
+        };
+      };
+    }
+  },[CTX, Canvas])
+
   const AddBall = (e: MouseEvent) => {
-    const { left , top, width, height } =  Canvas.current?.getBoundingClientRect()!;
+    const { left , top } =  Canvas.current?.getBoundingClientRect()!;
     const x = e.clientX - left;
     const y = e.clientY - top;
-    new Ball(50, x, y, width, height, CTX!);
+    BallInstance?.CreateBall(50, x, y);
   } 
 
 
