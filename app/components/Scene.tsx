@@ -5,11 +5,11 @@ import Ball from "../Ball";
 import ToggleBtn from "./ToggleBtn";
 
 export default function Scene() {
-  const [BallInstance, SetBallInstance] = useState<Ball>();
-  const [CTX, SetCTX] = useState<CanvasRenderingContext2D>();
-  const [Msg, SetMsg] = useState("");
   const Canvas = useRef<HTMLCanvasElement>(null);
-
+  const [CTX, SetCTX] = useState<CanvasRenderingContext2D>(); 
+  const [BallInstance, SetBallInstance] = useState<Ball>();
+  
+  const [Msg, SetMsg] = useState("");
 
   useEffect(() => {
     window.onresize = () => {
@@ -30,18 +30,24 @@ export default function Scene() {
   }, []);
 
   useEffect(() => {
-    if (CTX && Canvas) { 
+    if (CTX && Canvas) {
       const { left, top, width, height } =  Canvas.current?.getBoundingClientRect()!;
       const ball_instance = new Ball(width, height, CTX!);
-      
-      SetBallInstance(ball_instance);
 
-      Canvas.current!.onmousemove = (event) => {
-        if (ball_instance) {
+      SetBallInstance(ball_instance);
+ 
+      let Hold = false;
+      Canvas.current!.onmousedown = () => {
+        Hold =  true;
+        Canvas.current!.onmousemove =  (event) => {
+          if (Hold) {
             ball_instance.mx = event.clientX - left;
             ball_instance.my = event.clientY - top;
-        };
+          }
+        }
       };
+      Canvas.current!.onmouseup = () => { Hold = false }; 
+      
     }
   },[CTX, Canvas])
 
@@ -56,14 +62,14 @@ export default function Scene() {
   return (
     <div className="m-auto w-full flex-1 flex gap-8">
       <p className="p-4 absolute z-10 text-white text-xl">{Msg}</p>
-        <div className="com w-full">
-          <canvas ref={Canvas} onClick={(e: MouseEvent) => !!(localStorage.getItem('ADD_BALL')) ? AddBall(e) : null }></canvas>
-        </div>
-        <div className="h-full w-64 flex flex-col relative">
-          <div className="absolute com w-full divide-y-2 overflow-y-auto flex flex-col p-2 gap-2">
-            <ToggleBtn name="ADD_BALL" />
-          </div>
+      <div className="com w-full">
+        <canvas ref={Canvas} onClick={(e: MouseEvent) => !!(localStorage.getItem('ADD_BALL')) ? AddBall(e) : null }></canvas>
+      </div>
+      <div className="h-full w-64 flex flex-col relative">
+        <div className="absolute com w-full divide-y-2 overflow-y-auto flex flex-col p-2 gap-2">
+          <ToggleBtn name="ADD_BALL" />
         </div>
       </div>
+    </div>
   );
 }
