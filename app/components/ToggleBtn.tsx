@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ToggleBtn({ name }: { name: string }) {
-  const [Checked, SetChecked] = useState(localStorage.getItem(name) || '');
+  const [Checked, SetChecked] = useState('');
+
+  useEffect(() => SetChecked(localStorage.getItem(name) || ''), []);
 
   const handleCheck = () => {
     const State = Checked ? '' : '0';
