@@ -8,6 +8,7 @@ export default function Scene() {
   const Canvas = useRef<HTMLCanvasElement>(null);
   const [CTX, SetCTX] = useState<CanvasRenderingContext2D>(); 
   const [BallInstance, SetBallInstance] = useState<Ball>();
+  const [CanAddBall, SetCanAddBall] = useState(true);
   
   const [Msg, SetMsg] = useState("");
 
@@ -41,8 +42,11 @@ export default function Scene() {
         Hold =  true;
         Canvas.current!.onmousemove =  (event) => {
           if (Hold) {
+            SetCanAddBall(false)
             ball_instance.mx = event.clientX - left;
             ball_instance.my = event.clientY - top;
+          } else {
+            SetCanAddBall(true);
           }
         }
       };
@@ -52,10 +56,12 @@ export default function Scene() {
   },[CTX, Canvas])
 
   const AddBall = (e: MouseEvent) => {
-    const { left , top } =  Canvas.current?.getBoundingClientRect()!;
-    const x = e.clientX - left;
-    const y = e.clientY - top;
-    BallInstance?.CreateBall(50, x, y);
+    if (CanAddBall) {
+      const { left , top } =  Canvas.current?.getBoundingClientRect()!;
+      const x = e.clientX - left;
+      const y = e.clientY - top;
+      BallInstance?.CreateBall(50, x, y);
+    } 
   } 
 
 
