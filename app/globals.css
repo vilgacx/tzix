@@ -12,5 +12,5 @@
 }
 
 .opt-div {
-  @apply flex w-full p-4 justify-between items-center text-sm text-white;
+  @apply flex w-full justify-between items-center text-sm text-white;
 }
