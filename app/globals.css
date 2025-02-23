@@ -11,6 +11,18 @@
   @apply h-full bg-neutral-900 border-com rounded;
 }
 
-.opt-div {
-  @apply flex w-full justify-between items-center text-sm text-white;
+.option-main {
+  @apply flex flex-col gap-4;
+}
+
+.option-title {
+  @apply text-xl text-white uppercase;
+}
+
+.option-div {
+  @apply w-full flex text-sm text-white border-com rounded-sm;
+}
+
+.pad {
+  @apply p-2.5;
 }

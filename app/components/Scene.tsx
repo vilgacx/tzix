@@ -78,12 +78,17 @@ export default function Scene() {
   }
 
   return (
-    <div className="m-auto w-full flex-1 flex gap-8">
-      <p className="p-4 absolute z-10 text-white text-xl">{Msg}</p>
+    <>
+      <p className="p-4 absolute z-10 text-white text-xl">
+        {Msg}
+      </p>
       <div className="com w-full">
-        <canvas ref={Canvas} onClick={AddBall}></canvas>
+        <canvas
+          ref={Canvas}
+          onClick={AddBall}
+        >
+        </canvas>
       </div>
-      <Options />
-    </div>
+    </>
   );
 }

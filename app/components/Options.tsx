@@ -1,3 +1,5 @@
+"use client"
+
 import { ChangeEventHandler } from "react";
 import useOptionsStore from "../store/options.store";
 
@@ -5,10 +7,10 @@ export default function Options() {
   const { add, mass, toggle_add, set_mass } = useOptionsStore();
 
   return (
-    <div className="h-full w-64 flex flex-col relative">
-      <div className="absolute com w-full divide-y-2 overflow-y-auto flex flex-col p-5 gap-2">
-
-        <div className="flex flex-col gap-4 border-2 rounded p-3">
+    <div className="h-full w-72 flex flex-col relative">
+      <div className="absolute com w-full overflow-y-auto flex flex-col p-5 gap-8">
+        <div className="option-main">
+          <p className="option-title">ball</p>
           <ToggleBtn
             name="add_ball"
             checked={add}
@@ -16,6 +18,7 @@ export default function Options() {
           />
           <Input
             name="mass"
+            type="number"
             defaultValue={mass.toString()}
             fn={(e) => set_mass(Number(e.target.value))}
           />
@@ -36,11 +39,11 @@ interface ToggleBtnProps extends InputProps {
 
 interface TextInputProps extends InputProps {
   defaultValue: string;
+  type: string;
 }
-
 export function ToggleBtn(props: ToggleBtnProps) {
   return (
-    <div className="opt-div">
+    <div className="option-div pad justify-between items-center">
       <p>{props.name.split("_").join(" ").toUpperCase()}</p>
       <label className="flex cursor-pointer select-none items-center">
         <div className="relative">
@@ -61,12 +64,15 @@ export function ToggleBtn(props: ToggleBtnProps) {
 
 export function Input(props: TextInputProps) {
   return (
-    <div className="opt-div">
+    <div className="option-div divide-x-2">
+      <p className="pad">
+        {props.name.split("_").join(" ").toUpperCase()}
+      </p>
       <input
-        type="text"
+        type={props.type}
         defaultValue={props.defaultValue}
         placeholder={props.name}
-        className="border-com w-full rounded-sm bg-transparent p-2 text-sm text-white outline-none"
+        className="pad w-full bg-transparent outline-none"
         onChange={props.fn}
       />
     </div>
