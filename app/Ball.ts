@@ -52,7 +52,7 @@ class Ball {
       ctx.clearRect(0, 0, w, h);
       this.CreateBalls();
       this.DetectBalls();
-      this.CollisonDetection();
+      this.CollisionDetection();
 
       requestAnimationFrame(() => MainLoop());
     }
@@ -99,7 +99,9 @@ class Ball {
     }
   }
 
-  private CollisonDetection() {
+
+
+  private CollisionDetection() {
     this.balls.forEach((ball_a, index_a) => {
       this.balls.forEach((ball_b, index_b) => {
         if (index_a !== index_b) {
@@ -121,6 +123,7 @@ class Ball {
 
       if (!this.DetectBall(ball.r, ball.x, ball.y) && !this.hold) {
         const { r, x, y } = ball;
+
         const delta_x = (ball.x - ball.prev_x);
         const delta_y = (ball.y - ball.prev_y);
 
