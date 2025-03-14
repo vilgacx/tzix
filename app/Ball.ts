@@ -1,11 +1,15 @@
-type BallsArray = {
+type BallType = {
   r: number,
   x: number,
   y: number,
   prev_x: number,
   prev_y: number,
-  hold_delta: number,
-}[];
+  delta_x: number,
+  delta_y: number,
+  hold_delta: number
+}
+
+type BallsArray = BallType[];
 
 class Ball {
   t: number;
@@ -52,7 +56,6 @@ class Ball {
       ctx.clearRect(0, 0, w, h);
       this.CreateBalls();
       this.DetectBalls();
-      this.CollisionDetection();
 
       requestAnimationFrame(() => MainLoop());
     }
@@ -84,7 +87,7 @@ class Ball {
         const { r, x, y } = ball;
 
         if (this.DetectBall(r, x, y)) {
-          
+
           if (ball.hold_delta === this.t) {
             ball.prev_x = ball.x;
             ball.prev_y = ball.y;
@@ -92,43 +95,50 @@ class Ball {
 
           ball.x = this.mx;
           ball.y = this.my;
+
         }
 
         ball.hold_delta = this.t + 1;
+
+        ball.delta_x = (ball.x - ball.prev_x) * 0.01;
+        ball.delta_y = (ball.y - ball.prev_y) * 0.01;
       });
     }
   }
 
-
-
-  private CollisionDetection() {
-    this.balls.forEach((ball_a, index_a) => {
-      this.balls.forEach((ball_b, index_b) => {
-        if (index_a !== index_b) {
-          const d = Math.pow(ball_b.x - ball_a.x, 2) + Math.pow(ball_b.y - ball_a.y, 2);
-          if (d <= Math.pow(ball_a.r + ball_b.r, 2)) {
-            console.log("collison")
-          }
-        }
-      })
-    })
-  }
-
   CreateBall(r: number, x: number, y: number) {
-    this.balls.push({ r, x, y, prev_x: x, prev_y: y, hold_delta: 0 });
+    this.balls.push({ r, x, y, prev_x: x, prev_y: y, delta_x: 0, delta_y: 0, hold_delta: 0 });
   }
 
+  private CollisionDetection(ball: BallType, index: number) {
+    const { r, x, y } = ball;
+
+    if (x + r > this.w || x - r < 0) {
+      ball.delta_x *= -1;
+    }
+
+    if (y + r > this.h || y - r < 0) {
+      ball.delta_y *= -1;
+    }
+
+    this.balls.forEach((ball_b, index_b) => {
+      if (index !== index_b) {
+        const d = Math.pow(ball_b.x - x, 2) + Math.pow(ball_b.y - y, 2);
+        if (d <= Math.pow(r + ball_b.r, 2)) {
+          console.log("collison")
+        }
+      }
+    })
+
+  }
   private MoveBalls() {
-    this.balls.forEach((ball) => {
+    this.balls.forEach((ball, index) => {
+
+      this.CollisionDetection(ball, index);
 
       if (!this.DetectBall(ball.r, ball.x, ball.y) && !this.hold) {
-        const { r, x, y } = ball;
-
-        const delta_x = (ball.x - ball.prev_x);
-        const delta_y = (ball.y - ball.prev_y);
-
-        ball.x += (x + r > this.w || x - r < 0) ? 0 : delta_x * 0.01;
-        ball.y += (y + r > this.h || y - r < 0) ? 0 : delta_y * 0.01;
+        ball.x += ball.delta_x;
+        ball.y += ball.delta_y;
       }
     });
   }
