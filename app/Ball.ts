@@ -110,7 +110,7 @@ class Ball {
     this.balls.push({ r, x, y, prev_x: x, prev_y: y, delta_x: 0, delta_y: 0, hold_delta: 0 });
   }
 
-  private CollisionDetection(ball: BallType, index: number) {
+  private Collision(ball: BallType, index: number) {
     const { r, x, y } = ball;
 
     if (x + r > this.w || x - r < 0) {
@@ -134,7 +134,7 @@ class Ball {
   private MoveBalls() {
     this.balls.forEach((ball, index) => {
 
-      this.CollisionDetection(ball, index);
+      this.Collision(ball, index);
 
       if (!this.DetectBall(ball.r, ball.x, ball.y) && !this.hold) {
         ball.x += ball.delta_x;
