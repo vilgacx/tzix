@@ -3,7 +3,6 @@
 import { MouseEvent, useEffect, useRef, useState } from "react";
 
 import Ball from "@/app/Ball";
-import Options from "./Options";
 
 import useStore from "@/app/store/store";
 import useOptionsStore from "@/app/store/options.store";

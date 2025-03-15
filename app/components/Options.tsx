@@ -10,6 +10,9 @@ export default function Options() {
     <div className="h-full w-72 flex flex-col relative">
       <div className="absolute com w-full overflow-y-auto flex flex-col p-5 gap-8">
         <div className="option-main">
+          <MessageBox
+            text="Toggle enable any item, then click on the canvas to add it. To move an item, click and hold, then drag it with your mouse"
+          />
           <p className="option-title">ball</p>
           <ToggleBtn
             name="add_ball"
@@ -41,7 +44,20 @@ interface TextInputProps extends InputProps {
   defaultValue: string;
   type: string;
 }
-export function ToggleBtn(props: ToggleBtnProps) {
+
+interface MessageProps {
+  text: string;
+}
+
+function MessageBox(props: MessageProps) {
+  return (
+    <div className="w-full bg-neutral-700 text-white rounded text-xs pad">
+      <p>{props.text}</p>
+    </div>
+  )
+}
+
+function ToggleBtn(props: ToggleBtnProps) {
   return (
     <div className="option-div pad justify-between items-center">
       <p>{props.name.split("_").join(" ").toUpperCase()}</p>
@@ -62,7 +78,7 @@ export function ToggleBtn(props: ToggleBtnProps) {
   )
 }
 
-export function Input(props: TextInputProps) {
+function Input(props: TextInputProps) {
   return (
     <div className="option-div divide-x-2">
       <p className="pad">
