@@ -121,16 +121,19 @@ class Ball {
       ball.delta_y *= -1;
     }
 
-    this.balls.forEach((ball_b, index_b) => {
-      if (index !== index_b) {
-        const d = Math.pow(ball_b.x - x, 2) + Math.pow(ball_b.y - y, 2);
-        if (d <= Math.pow(r + ball_b.r, 2)) {
-          console.log("collison")
-        }
-      }
-    })
+    this.balls.forEach((other_ball, other_index) => {
+      if (index !== other_index) {
+        // const impact_line = Math.pow(other_ball.x - x, 2) + Math.pow(other_ball.y - y, 2);
+        // const ball_velocity = Math.sqrt((Math.pow(ball.delta_x, 2) + Math.pow(ball.delta_y, 2)));
+        // const other_ball_velocity = Math.sqrt((Math.pow(other_ball.delta_x, 2) + Math.pow(ball.delta_y, 2)));
 
+        // const or = Math.pow(r + other_ball.r, 2);
+
+      }
+
+    })
   }
+
   private MoveBalls() {
     this.balls.forEach((ball, index) => {
 
