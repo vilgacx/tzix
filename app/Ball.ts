@@ -99,12 +99,11 @@ class Ball {
           ball.x = this.mx;
           ball.y = this.my;
 
+          ball.hold_delta = this.t + 1;
+
+          ball.delta.x = (ball.x - ball.prev_x) * 0.01;
+          ball.delta.y = (ball.y - ball.prev_y) * 0.01;
         }
-
-        ball.hold_delta = this.t + 1;
-
-        ball.delta.x = (ball.x - ball.prev_x) * 0.01;
-        ball.delta.y = (ball.y - ball.prev_y) * 0.01;
       });
     }
   }
@@ -115,7 +114,7 @@ class Ball {
 
   private Collision(ball: BallType, index: number) {
     const { r, x, y, mass, delta: { x: delta_x, y: delta_y } } = ball;
-    
+
     this.balls.forEach((other_ball, other_index) => {
 
       if (index !== other_index) {
@@ -150,9 +149,12 @@ class Ball {
 
       this.Collision(ball, index);
 
-      if (!this.hold && !this.DetectBall(ball.r, ball.x, ball.y)) {
-        ball.x += ball.delta.x;
-        ball.y += ball.delta.y;
+      const detect = this.DetectBall(ball.r, ball.x, ball.y);
+
+
+      if (!(this.hold && detect)) {
+          ball.x += ball.delta.x;
+          ball.y += ball.delta.y;
       }
     });
   }
