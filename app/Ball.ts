@@ -114,8 +114,8 @@ class Ball {
   }
 
   private Collision(ball: BallType, index: number) {
-    const { r, x, y, mass } = ball;
-
+    const { r, x, y, mass, delta: { x: delta_x, y: delta_y } } = ball;
+    
     this.balls.forEach((other_ball, other_index) => {
 
       if (index !== other_index) {
@@ -125,6 +125,10 @@ class Ball {
 
           ball.delta.x = ball.delta.x + (mass_eq * (other_ball.delta.x - ball.delta.x));
           ball.delta.y = ball.delta.y + (mass_eq * (other_ball.delta.y - ball.delta.y));
+
+          other_ball.delta.x = other_ball.delta.x + (mass_eq * (delta_x - other_ball.delta.x));
+          other_ball.delta.y = other_ball.delta.y + (mass_eq * (delta_y - other_ball.delta.y));
+
         }
 
       }
@@ -146,7 +150,7 @@ class Ball {
 
       this.Collision(ball, index);
 
-      if (!this.DetectBall(ball.r, ball.x, ball.y) && !this.hold) {
+      if (!this.hold && !this.DetectBall(ball.r, ball.x, ball.y)) {
         ball.x += ball.delta.x;
         ball.y += ball.delta.y;
       }
