@@ -11,7 +11,7 @@ export default function Options() {
       <div className="absolute com w-full overflow-y-auto flex flex-col p-5 gap-8">
         <div className="option-main">
           <MessageBox
-            text="Toggle enable any item, then click on the canvas to add it. To move an item, click and hold, then drag it with your mouse"
+            text="Toggle enable any item, then click on the canvas to add it. To move an item, click and hold, then drag, then release it."
           />
           <p className="option-title">ball</p>
           <ToggleBtn

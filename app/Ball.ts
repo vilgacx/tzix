@@ -2,10 +2,13 @@ type BallType = {
   r: number,
   x: number,
   y: number,
+  mass: number,
   prev_x: number,
   prev_y: number,
-  delta_x: number,
-  delta_y: number,
+  delta: {
+    x: number,
+    y: number
+  },
   hold_delta: number
 }
 
@@ -100,38 +103,42 @@ class Ball {
 
         ball.hold_delta = this.t + 1;
 
-        ball.delta_x = (ball.x - ball.prev_x) * 0.01;
-        ball.delta_y = (ball.y - ball.prev_y) * 0.01;
+        ball.delta.x = (ball.x - ball.prev_x) * 0.01;
+        ball.delta.y = (ball.y - ball.prev_y) * 0.01;
       });
     }
   }
 
-  CreateBall(r: number, x: number, y: number) {
-    this.balls.push({ r, x, y, prev_x: x, prev_y: y, delta_x: 0, delta_y: 0, hold_delta: 0 });
+  CreateBall(r: number, x: number, y: number, mass: number) {
+    this.balls.push({ r, x, y, prev_x: x, prev_y: y, mass: mass, delta: { x: 0, y: 0 }, hold_delta: 0 });
   }
 
   private Collision(ball: BallType, index: number) {
-    const { r, x, y } = ball;
-
-    if (x + r > this.w || x - r < 0) {
-      ball.delta_x *= -1;
-    }
-
-    if (y + r > this.h || y - r < 0) {
-      ball.delta_y *= -1;
-    }
+    const { r, x, y, mass } = ball;
 
     this.balls.forEach((other_ball, other_index) => {
-      if (index !== other_index) {
-        // const impact_line = Math.pow(other_ball.x - x, 2) + Math.pow(other_ball.y - y, 2);
-        // const ball_velocity = Math.sqrt((Math.pow(ball.delta_x, 2) + Math.pow(ball.delta_y, 2)));
-        // const other_ball_velocity = Math.sqrt((Math.pow(other_ball.delta_x, 2) + Math.pow(ball.delta_y, 2)));
 
-        // const or = Math.pow(r + other_ball.r, 2);
+      if (index !== other_index) {
+        if (Math.pow(other_ball.x - x, 2) + Math.pow(other_ball.y - y, 2) <= Math.pow(r + other_ball.r, 2)) {
+
+          const mass_eq = (2 * other_ball.mass) / (mass + other_ball.mass);
+
+          ball.delta.x = ball.delta.x + (mass_eq * (other_ball.delta.x - ball.delta.x));
+          ball.delta.y = ball.delta.y + (mass_eq * (other_ball.delta.y - ball.delta.y));
+        }
 
       }
 
     })
+
+    if (x + r > this.w || x - r < 0) {
+      ball.delta.x *= -1;
+    }
+
+    if (y + r > this.h || y - r < 0) {
+      ball.delta.y *= -1;
+    }
+
   }
 
   private MoveBalls() {
@@ -140,8 +147,8 @@ class Ball {
       this.Collision(ball, index);
 
       if (!this.DetectBall(ball.r, ball.x, ball.y) && !this.hold) {
-        ball.x += ball.delta_x;
-        ball.y += ball.delta_y;
+        ball.x += ball.delta.x;
+        ball.y += ball.delta.y;
       }
     });
   }

@@ -16,7 +16,7 @@ export default function Scene() {
 
   const [Msg, SetMsg] = useState("");
 
-  const Store = useStore(useOptionsStore, (state) => state);
+  const { add, mass } = useOptionsStore();
 
   useEffect(() => {
     window.onresize = () => {
@@ -68,11 +68,11 @@ export default function Scene() {
   }, [CTX, Canvas])
 
   const AddBall = (e: MouseEvent) => {
-    if (Store?.add && CanAddBall) {
+    if (add && CanAddBall) {
       const { left, top } = Canvas.current?.getBoundingClientRect()!;
       const x = e.clientX - left;
       const y = e.clientY - top;
-      BallInstance?.CreateBall(50, x, y);
+      BallInstance?.CreateBall(50, x, y, mass);
     }
   }
 
